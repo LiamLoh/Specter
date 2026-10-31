@@ -1,428 +1,210 @@
-# 🔮 Specter - Autonomous AI Agent for Signup Testing
+<div align="center">
 
-**100% autonomous signup testing with vision-based navigation and cognitive UX analysis**
+# Specter
 
-Specter combines AI-powered navigation (Feature 1) with mathematical friction analysis (Feature 2) to automatically detect UX issues, accessibility problems, and network latency in signup flows.
+### The Sentient Mystery Shopper that sees, feels, and heals your conversion funnel
 
----
+An autonomous AI agent that tests signup flows like a real human: it navigates by vision, role-plays user personas, measures friction, diagnoses root causes, and proposes code fixes.
 
-## ✨ Features
+![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-backend-009688?logo=fastapi&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
+![Playwright](https://img.shields.io/badge/Playwright-automation-2EAD33?logo=playwright&logoColor=white)
+![Claude](https://img.shields.io/badge/Claude-Vision-D97757?logo=anthropic&logoColor=white)
 
-### Feature 1: Multimodal Human-Persona Navigator (100%)
-- ✅ Vision-based navigation using Claude Vision
-- ✅ Autonomous decision-making (no hardcoded selectors)
-- ✅ User persona simulation (normal, cautious, confused, elderly, mobile_novice)
-- ✅ Device emulation (iPhone, Android, Desktop)
-- ✅ Network throttling (3G, 4G, WiFi, Slow)
-- ✅ Accessibility detection (button size, contrast, elderly-friendly)
-
-### Feature 2: Cognitive UX Analyst & Diagnosis (100%)
-- ✅ Mathematical F-Score calculation (friction metric)
-- ✅ Dynamic AI Uncertainty Heatmap generation
-- ✅ Ghost Replay GIF (animated failure replay)
-- ✅ P0-P3 severity classification (impact-based)
-- ✅ Smart team routing (Backend, Frontend, Design, QA)
-- ✅ Claude Vision diagnosis with root cause analysis
-- ✅ Slack escalation + PDF reports to team channels
-
-📖 **[Understanding Severity & Team Assignment →](SEVERITY_LOGIC.md)**
+</div>
 
 ---
 
-## 🧠 The Architecture (Double-Brain System)
+## Overview
 
-Specter uses a high-performance hybrid architecture to simulate human behavior while maintaining rigorous technical diagnosis.
+Broken or confusing signup flows silently cost businesses users and revenue, and traditional end-to-end tests only catch what someone thought to script. **Specter** replaces scripted tests with an AI "mystery shopper" that:
 
-### 1. The Planner Brain (`main.py`)
-This is the "Persona" engine. It observes the page, thinks like a human (e.g., "I'm a Zoomer and I'm impatient"), and decides on the next click or input.
-- **Output:** `Vision` (what it sees) + `Thought` (why it's doing it).
-- **Frontend:** Displayed in real-time in the Neural Monologue log.
+1. **Sees** the page through screenshots and the DOM, deciding each action autonomously with no hard-coded selectors.
+2. **Feels** friction the way a real person would, by simulating personas, devices, and network conditions and scoring the experience.
+3. **Heals** the funnel by diagnosing root causes, routing issues to the right team, and generating suggested code fixes as GitHub pull requests.
 
-### 2. The Doctor Brain (`diagnosis_doctor.py`)
-This is the "Analytical" engine. It runs after every action to verify if the action worked and detect deep technical issues (console errors, network failures, UX friction).
-- **Output:** `Diagnosis` + `Severity` + `F-Score`.
-- **Voice:** This is the ONLY part narrated by the TTS to ensure the most important findings are heard immediately without lag.
+## Key Features
 
-### 3. Neural Link (TTS Service)
-Powered by **Kokoro-ONNX**, a lightweight and low-latency voice model.
-- **Voice:** `af_sky` (Human-like, modern).
-- **Pre-warming:** The model is initialized on server startup to ensure 0ms latency for the first step.
-- **Filter:** Only narrate concise, human-like summaries of the Diagnosis to avoid audio clutter.
+### Multimodal persona navigator
+- Vision-based navigation powered by a multimodal LLM (Claude, with NVIDIA NIM and Gemini fallbacks)
+- Five behavioural personas, from speed-runners to privacy skeptics to "chaos monkeys"
+- Device emulation (iPhone, Android, desktop), network throttling (3G to Wi-Fi), and locale switching
+- Accessibility checks for touch-target size, contrast, and text legibility
 
----
+### Cognitive UX analysis and diagnosis
+- **F-Score**: a 0–100 friction metric combining console errors, dwell time, and expectation mismatch
+- **AI uncertainty heatmaps** and **Ghost Replay** GIFs that animate where users got stuck
+- **P0–P3 severity** classification with automatic routing to Backend, Frontend, Design, or QA
+- Root-cause analysis with recurring-pattern detection across runs
 
-## 🚀 Quick Start
+### Escalation and self-healing
+- Slack escalation with PDF incident reports sent to the responsible team's channel
+- **Specter Healer**: AI-generated fixes opened as GitHub pull requests
+- **Neural Monologue**: live narration of the agent's reasoning with low-latency on-device TTS (Kokoro-ONNX)
 
-### 1. Installation
+### Dashboard
 
-```bash
-# Install Python dependencies
-pip install -r requirements.txt
+| Page | Purpose |
+|---|---|
+| **Lab** | Launch a test run and watch the agent live: device emulator, ghost cursor, neural monologue |
+| **Vault** | Browse past runs and incidents with screenshots, heatmaps, and replays |
+| **Command Center** | Funnel health overview: F-Score trends, revenue impact, root causes, and healing hub |
 
-# Install Playwright (for autonomous mode)
-pip install playwright
-playwright install chromium
+## Architecture
 
-# Download Kokoro TTS Models (Required for Neural Monologue Voice)
-# 1. Create a 'models' folder in the project root
-# 2. Download 'kokoro-v1.0.onnx' and 'voices-v1.0.bin' from:
-#    https://github.com/thewh1teagle/kokoro-onnx/releases/tag/model-files
-# 3. Place them in the 'models/' folder.
+```
+┌──────────────── Next.js dashboard ────────────────┐        ┌────────────── FastAPI backend ──────────────┐
+│  Lab · Vault · Command Center · Specter Healer    │◄──WS──►│  api_server.py                               │
+└───────────────────────────────────────────────────┘  REST  │   ├─ Planner brain   (main.py)               │
+                                                             │   │    persona-driven vision navigation       │
+                                                             │   ├─ Doctor brain    (diagnosis_doctor.py)    │
+            Target website ◄── Playwright ──────────────────┤   │    per-step verification + diagnosis      │
+                                                             │   ├─ Expectation engine (F-Score, heatmaps)  │
+                                                             │   ├─ Root-cause intelligence                 │
+                                                             │   └─ Escalation (Slack + PDF) · TTS          │
+                                                             └──────────────────────────────────────────────┘
 ```
 
-### 2. Configuration
+| Layer | Technology |
+|---|---|
+| Frontend | Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, shadcn/ui, Radix, Framer Motion |
+| Backend | FastAPI, Uvicorn, WebSockets |
+| Browser automation | Playwright with a custom crawler and action executor (`webqa_agent/`) |
+| AI | Anthropic Claude (vision + reasoning), NVIDIA NIM Llama 3.2 Vision, Google Gemini |
+| Analysis | NumPy, SciPy, scikit-image, OpenCV, sentence-transformers |
+| Reporting | ReportLab (PDF), Slack SDK, Octokit (GitHub PRs), Kokoro-ONNX (TTS) |
 
-Create `.env` file in `backend/` folder:
-
-```bash
-# backend/.env
-CLAUDE_API_KEY=your_claude_api_key_here
-SLACK_WEBHOOK_URL=your_slack_webhook_url_here
-```
-
----
-
-## 🛠 Development setup (full-stack app)
-
-For working on the Next.js dashboard (Lab, Vault, Command Center, Healer) with the FastAPI backend.
+## Getting Started
 
 ### Prerequisites
 
-- **Node.js** 20+ (LTS or current). [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm) recommended.
-- **Python** 3.10+ and `pip`.
-- **Git** (for Healer PRs; token required only if you use "Open GitHub Pull Request").
+- Node.js 20+
+- Python 3.10+
+- An Anthropic API key (other providers are optional)
 
-### 1. Install dependencies
+### 1. Clone and install
 
 ```bash
+git clone https://github.com/LiamLoh/Specter.git
+cd Specter
+
 # Frontend
 npm install
 
 # Backend
 pip install -r requirements.txt
-
-# Playwright (only if you run E2E or autonomous agent)
 pip install playwright
 playwright install chromium
-# Optional for Next.js E2E: npx playwright install
 ```
 
-### 2. Environment variables
-
-**Backend** — create `backend/.env`:
+### 2. Configure environment variables
 
 ```bash
-CLAUDE_API_KEY=your_anthropic_api_key_here
-SLACK_WEBHOOK_URL=your_slack_webhook_url_here   # optional
-NVIDIA_API_KEY=your_nvidia_api_key_here         # optional; used by diagnosis/Healer
-GEMINI_API_KEY=your_gemini_api_key_here         # optional; fallback
+cp .env.example backend/.env       # backend keys (Claude, Slack, NVIDIA, Gemini)
+cp .env.example .env.local         # frontend keys (GitHub, NVIDIA) for Specter Healer
 ```
 
-**Frontend** — create `.env.local` in the **project root** (next to `package.json`):
+Then fill in the values you need. See [Configuration](#configuration) below.
+
+### 3. (Optional) Enable voice narration
+
+Download `kokoro-v1.0.onnx` and `voices-v1.0.bin` from the [kokoro-onnx releases](https://github.com/thewh1teagle/kokoro-onnx/releases/tag/model-files) and place them in a `models/` folder at the project root. Without them, Specter runs normally with TTS disabled.
+
+### 4. Run
 
 ```bash
-# GitHub (required for Specter Healer "Open GitHub Pull Request")
-# Create a classic Personal Access Token with 'repo' scope: https://github.com/settings/tokens
-GITHUB_TOKEN=your_github_pat_here
-GITHUB_OWNER=your_github_username_or_org
-GITHUB_REPO=Specter
-
-# NVIDIA NIM (for Healer AI-generated fixes; can copy from backend/.env)
-NVIDIA_API_KEY=your_nvidia_api_key_here
+npm run run
 ```
 
-If `GITHUB_TOKEN` / `GITHUB_OWNER` are missing, the Healer still runs but will return a mocked PR (no real branch or PR created). Do **not** commit `.env` or `.env.local`; they are gitignored.
+This starts the FastAPI backend on **http://localhost:8000** and the dashboard on **http://localhost:3000**. To run them separately, use `python run_dev.py` and `npm run dev` in two terminals.
 
-### 3. Run the app
+> On Windows, the backend runs without auto-reload for Playwright compatibility. Restart it after backend code changes.
+
+### Command-line usage
+
+Run the agent directly against any signup page:
 
 ```bash
-# Terminal 1 — FastAPI backend (port 8000)
-python run_dev.py
-
-# Terminal 2 — Next.js (port 3000)
-npm run dev
+python main.py https://example.com/signup --persona boomer --device iphone13 --network 3g
 ```
 
-Then open [http://localhost:3000](http://localhost:3000). The Command Center (Page 4) talks to the backend at `http://localhost:8000`.
+| Option | Values | Default |
+|---|---|---|
+| `--persona` | `zoomer` (speedster), `boomer` (anxious first-timer), `skeptic` (privacy-focused), `chaos` (tries to break the form), `mobile` (small screen, fat fingers) | `zoomer` |
+| `--device` | `iphone13`, `android`, `desktop` | `desktop` |
+| `--network` | `wifi`, `4g`, `3g`, `slow` | `wifi` |
+| `--locale` | Any locale code, e.g. `en-US`, `es-ES` | `en-US` |
+| `--max-steps` | Maximum agent actions per run | `20` |
 
-**Note:** On Windows, `run_dev.py` disables auto-reload to avoid socket errors; restart it manually after backend code changes.
+## Configuration
 
-### Line endings (Windows ↔ macOS/Linux)
+| Variable | Location | Required | Purpose |
+|---|---|---|---|
+| `CLAUDE_API_KEY` | `backend/.env` | Yes | Vision navigation and diagnosis |
+| `NVIDIA_API_KEY` | both | No | NVIDIA NIM vision model and Healer fixes |
+| `GEMINI_API_KEY` | `backend/.env` | No | Fallback model |
+| `SLACK_BOT_TOKEN`, `SLACK_CHANNEL_ID` | `backend/.env` | No | Slack escalation |
+| `SLACK_{BACKEND,FRONTEND,DESIGN,QA}_CHANNEL` | `backend/.env` | No | Per-team routing channels |
+| `GITHUB_TOKEN`, `GITHUB_OWNER`, `GITHUB_REPO` | `.env.local` | No | Healer pull requests (mocked if missing) |
 
-The repo uses **LF** line endings (enforced via `.gitattributes`). That way Mac/Linux teammates don’t see CRLF-related diffs or script issues after pulling. On Windows, Git will still handle your working copy according to `core.autocrlf`; commits stay LF. If the repo had CRLF files before, a one-time renormalize (e.g. `git add --renormalize .` then commit) will fix them; after that, everyone gets LF.
+> Never commit `.env` or `.env.local`. Both are excluded by `.gitignore`.
 
----
+## How the F-Score Works
 
-### 3. Run Tests
-
-**Demo Mode** (uses mock data, shows Feature 2):
-```bash
-python main.py
+```
+F-Score = Console entropy    (0–25)   JS errors and warnings
+        + Dwell time         (0–40)   waiting beyond 5 seconds
+        + Semantic distance  (0–25)   gap between expected and actual outcome
+        + 15 if any server (5xx) error occurred     (capped at 100)
 ```
 
-**Autonomous Mode** (full end-to-end testing):
-```bash
-# Basic test
-python main.py autonomous https://example.com/signup
+| Severity | Meaning | Trigger |
+|---|---|---|
+| **P0** Critical | Signup blocked | F-Score > 85 or server (5xx) errors |
+| **P1** Major | High drop-off risk | F-Score > 70 or high confusion |
+| **P2** Minor | Degraded experience | F-Score 50–70 |
+| **P3** Cosmetic | Minor UI issues | F-Score < 50 |
 
-# With specific persona and device
-python main.py autonomous https://spotify.com/signup --persona cautious --device iphone13
+Heatmaps and Ghost Replays are generated for failing steps (F-Score > 50).
 
-# Test with network throttling
-python main.py autonomous https://app.com/signup --network 3g --device android
+## API Overview
 
-# Elderly accessibility test
-python main.py autonomous https://yourapp.com/signup --persona elderly --device desktop
+| Area | Endpoints |
+|---|---|
+| Health | `GET /api/health` |
+| Test runs | `POST /api/test/start`, `GET /api/test/{id}`, `WS /ws/live/{id}` |
+| Reports | `GET /api/reports/list`, `GET /api/reports/details/{id}` |
+| Incidents | `GET /api/incidents`, `GET /api/incidents/{id}/root-cause`, `GET /api/root-cause/patterns` |
+| Dashboard | `GET /api/dashboard/stats` |
+| Diagnosis and alerts | `POST /api/diagnose`, `POST /api/alert` |
+| Healing | `GET /api/healing/suggestions`, `POST /api/ai/fix-code` |
+| Voice | `GET /api/tts/status`, `POST /api/tts` |
 
-# All options
-python main.py autonomous https://app.com/signup \
-  --persona confused \
-  --device iphone13 \
-  --network slow \
-  --locale es-ES
-```
+Interactive docs are available at **http://localhost:8000/docs** while the backend is running.
 
-**Pre-built Demos**:
-```bash
-# Robust QA demo (tests all personas)
-python demo_robust_qa.py
-
-# Local test (3 scenarios with test_signup.html)
-python test_autonomous_demo.py
-
-# Integration verification (20/20 checks)
-python verify_integration.py
-```
-
----
-
-## 📋 Available Options
-
-### Personas (User Behavior)
-| Persona | Description | Use Case |
-|---------|-------------|----------|
-| `normal` | Typical first-time user | General testing |
-| `cautious` | Reads everything carefully | Detailed UI testing |
-| `confused` | Struggles with UI | Error handling |
-| `elderly` | 65+, needs large text/buttons | Accessibility testing |
-| `mobile_novice` | First-time smartphone user | Mobile usability |
-
-### Devices (Emulation)
-| Device | Resolution | Use Case |
-|--------|-----------|----------|
-| `iphone13` | 390x844 | iOS mobile testing |
-| `android` | 393x851 | Android testing |
-| `desktop` | 1920x1080 | Desktop testing |
-
-### Networks (Throttling)
-| Network | Speed | Latency | Use Case |
-|---------|-------|---------|----------|
-| `wifi` | 30 Mbps | 2ms | Optimal conditions |
-| `4g` | 4 Mbps | 20ms | Good mobile |
-| `3g` | 400 Kbps | 400ms | Poor connection |
-| `slow` | 50 Kbps | 800ms | Worst case |
-
----
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 Specter/
-├── main.py                    # Main autonomous agent
-├── backend/
-│   ├── expectation_engine.py  # F-Score calculation + heatmap/GIF
-│   ├── diagnosis_doctor.py    # Claude Vision diagnosis
-│   ├── escalation_webhook.py  # Slack alerts
-│   ├── mock_data.py           # Demo data
-│   └── webqa_bridge.py        # Integration layer
-├── reports/                   # Generated test reports
-│   └── test_TIMESTAMP/
-│       ├── screenshots/       # Before/after images
-│       ├── heatmap.png       # AI uncertainty heatmap
-│       └── ghost_replay.gif  # Animated failure replay
-├── demo_robust_qa.py         # Robust QA demonstration
-├── test_autonomous_demo.py   # 3-scenario test suite
-├── verify_integration.py     # Integration verification
-└── test_signup.html          # Local test page
+├── app/                    Next.js routes: landing, lab, vault, command, mock-target, API
+├── components/             UI components (lab, vault, command, landing, shadcn/ui)
+├── lib/                    Frontend utilities, TTS hook, Healer scenarios
+├── backend/                Diagnosis, F-Score engine, root-cause, escalation, TTS, PDF reports
+├── webqa_agent/            Playwright browser sessions, crawler, and action execution
+├── config/                 Example run configurations
+├── api_server.py           FastAPI application
+├── main.py                 Autonomous agent (CLI entry point)
+└── run_dev.py              Development server launcher
 ```
 
----
+## Team
 
-## 🎯 What Gets Detected
-
-Specter's vision-based LLM analysis detects:
-
-### 🔘 Button Size Issues
-- Mobile touch targets < 44px (Apple HIG)
-- Desktop buttons < 32px
-- F-Score penalty: +3pts per undersized button
-
-### 👴 Elderly Accessibility (WCAG AAA)
-- Text size < 16px
-- Contrast ratios < 7:1
-- Complex language
-- Unclear affordances
-- F-Score penalty: +5pts if elderly_unfriendly + 3pts per issue
-
-### 🌐 Network Latency
-- Slow requests (>3s duration)
-- Timeout errors in console
-- Missing loading indicators
-- F-Score penalty: +3pts per slow request, +5pts per timeout
-
-### 🎯 Vision-Based Navigation
-- Predicts exact click coordinates (x, y from screenshot)
-- No hardcoded selectors needed
-- Adapts to dynamic UIs
-
-### 🧩 Confusion Risks
-- Multiple similar buttons
-- Form fields without labels
-- Unclear error messages
-- F-Score penalty: +3pts per issue
-
----
-
-## 📊 Generated Artifacts
-
-After each test, check:
-
-```
-reports/test_YYYY-MM-DD_HH-MM-SS_XXXXXX/
-├── screenshots/
-│   ├── step_1_before.png
-│   ├── step_1_after.png
-│   └── ...
-├── heatmap.png          # Generated when F-Score > 50
-└── ghost_replay.gif     # Generated when F-Score > 50
-```
-
-**Note**: Heatmaps and GIFs only generate on failures (F-Score > 50). Passing tests only save screenshots.
-
----
-
-## 🧪 Testing Your Broken UI
-
-If you have a broken UI for testing:
-
-```bash
-# Test with your broken UI
-python main.py autonomous https://mocked-website.vercel.app/ --persona elderly
-
-# Simulate high friction for full pipeline
-python demo_high_friction.py
-```
-
----
-
-## 📈 F-Score Breakdown
-
-Specter calculates a friction score (0-100) based on:
-
-```
-F-Score = Console Entropy (0-25)      # JS errors, warnings
-        + Dwell Time (0-40)           # User waiting time
-        + Semantic Distance (0-25)     # Expectation mismatch
-        + Network Latency (0-20)       # Slow requests, timeouts
-        + Accessibility (0-15)         # UI/UX issues
-```
-
-**Severity Classification**:
-- **P0 (Critical)**: Signup completely blocked (F-Score > 85 OR 5xx errors)
-- **P1 (Major)**: High friction, drop-off risk (F-Score > 70 OR confusion > 7)
-- **P2 (Minor)**: Degraded experience (F-Score 50-70)
-- **P3 (Cosmetic)**: Minor UI issues (F-Score < 50)
-
-**Team Assignment** (independent of severity):
-- **Backend**: 5xx errors, database issues, server timeouts
-- **Frontend**: 4xx errors, JavaScript errors, API endpoint issues
-- **Design**: UX/accessibility, touch targets, visual issues
-- **QA**: Unclear root cause, needs investigation
-
-**Important**: P0 ≠ Backend! A critical P0 signup block can be caused by Backend (DB timeout), Frontend (404 API), or Design (invisible button). See [SEVERITY_LOGIC.md](SEVERITY_LOGIC.md) for comprehensive examples.
-
----
-
-## 🔧 Troubleshooting
-
-**"Autonomous mode not available"**:
-```bash
-pip install playwright langchain langchain-anthropic
-playwright install chromium
-```
-
-**"Claude API error"**:
-- Check your `CLAUDE_API_KEY` in `backend/.env`
-- Ensure you have Claude API credits
-
-**"Vision analysis failed - invalid base64"**:
-- This is a known issue being fixed
-- Fallback to basic analysis still works
-- Core functionality unaffected
-
-**"No heatmap/GIF generated"**:
-- These only generate when F-Score > 50 (failures)
-- Check `backend/assets/` for demo mode artifacts
-- Check `reports/test_*/` for autonomous mode artifacts
-
----
-
-## 📚 Documentation
-
-- **[AUTONOMOUS_DEMO.md](AUTONOMOUS_DEMO.md)** - Complete usage guide with examples
-- **[ROBUST_QA.md](ROBUST_QA.md)** - Enhanced QA capabilities documentation
-- **Backend Components**:
-  - `expectation_engine.py` - F-Score algorithm details
-  - `diagnosis_doctor.py` - AI diagnosis implementation
-  
----
-
-## 🎬 Example Output
-
-```bash
-$ python main.py autonomous https://app.com/signup --persona elderly
-
-══════════════════════════════════════════════════════════════
-🤖 SPECTER AUTONOMOUS AGENT - Initializing
-══════════════════════════════════════════════════════════════
-📍 URL: https://app.com/signup
-📱 Device: Desktop 1920x1080
-📡 Network: WiFi
-👤 Persona: Elderly User (65+)
-
-🔹 Step 1/4: Find and analyze the signup form
-   ⚠️  UI Issues Detected:
-      - Button too small - 28x28px, needs 44px+
-      - Poor elderly access - text is 12px, needs 16px+
-   🔎 Checking Step 1...
-      + Accessibility Issues: 9.0pts (3 critical)
-      + Elderly Unfriendly UI: +5.0pts
-   📊 Final F-Score: 65.0/100 (P2)
-
-🎬 AUTONOMOUS TEST COMPLETE
-✅ Passed: 2/4
-❌ Failed: 2/4
-📊 Status: FAIL
-══════════════════════════════════════════════════════════════
-```
-
----
-
-## 🤝 Contributing
-
-This is a production-ready autonomous testing framework. All core features are implemented and functional.
-
----
-
-## 📝 License
-
-MIT License - See LICENSE file for details
-
----
-
-## 🔗 Quick Links
-
-- Run basic test: `python main.py`
-- Run autonomous: `python main.py autonomous <URL>`
-- Verify integration: `python verify_integration.py`
-- Robust QA demo: `python demo_robust_qa.py`
+- [@hmhhmm](https://github.com/hmhhmm)
+- [@johnong04](https://github.com/johnong04)
+- Loh Yong Qiao ([@LiamLoh](https://github.com/LiamLoh))
+- Felicia Sia Xin Rou
+- Jin Wei
